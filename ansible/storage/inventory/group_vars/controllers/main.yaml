@@ -16,5 +16,5 @@ k3s_server:
   node-ip: "{{ ansible_host }}"
   secrets-encryption: true
   service-cidr: 10.133.0.0/16
-  tls-san: ["{{ k3s_registration_address }}", "expanse.monosense.io", "expanse"]
+  tls-san: ["{{ k3s_registration_address }}", "storage.tripranata.com", "storage"]
   write-kubeconfig-mode: "0644" # quote
