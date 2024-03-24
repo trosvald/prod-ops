@@ -1,0 +1,8 @@
+{
+    "id": "prod-m0",
+    "name": "prod-m0",
+    "profile": "talos-controller",
+    "selector": {
+        "mac": "1c:69:7a:0d:8d:99"
+    }
+}

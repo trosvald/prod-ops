@@ -4,10 +4,10 @@ version: "3"
 
 tasks:
 
-  main:
+  prod:
     vars: &vars
-      cluster: main
-      cephnodes: k8s-0 k8s-1 k8s-2 k8s-3 k8s-4 k8s-5
+      cluster: prod
+      cephnodes: prod-m0 prod-m1 prod-m2 prod-w0 prod-w1 prod-w2
       cephdisk: /dev/nvme0n1
     cmds:
       - task: :talos:bootstrap
@@ -20,9 +20,25 @@ tasks:
       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
       - talosctl --context {{.cluster}} config info >/dev/null 2>&1
 
-  storage:
+  dev:
     vars: &vars
-      cluster: storage
+      cluster: dev
+      cephnodes: dev-k0 dev-k1 dev-k2
+      cephdisk: /dev/sdb
+    cmds:
+      - task: :talos:bootstrap
+        vars: *vars
+      - task: :rook:reset
+        vars: *vars
+      - task: :flux:bootstrap
+        vars: *vars
+    preconditions:
+      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
+      - talosctl --context {{.cluster}} config info >/dev/null 2>&1
+
+  infra:
+    vars: &vars
+      cluster: infra
       playbook: cluster-installation
     cmds:
       - task: :ansible:venv

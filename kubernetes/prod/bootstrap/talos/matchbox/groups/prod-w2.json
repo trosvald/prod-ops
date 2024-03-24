@@ -1,0 +1,8 @@
+{
+    "id": "prod-w2",
+    "name": "prod-w2",
+    "profile": "talos-worker",
+    "selector": {
+        "mac": "1c:69:7a:09:bf:39"
+    }
+}

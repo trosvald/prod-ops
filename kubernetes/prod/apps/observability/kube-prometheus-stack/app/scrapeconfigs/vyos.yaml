@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: vyos-gatus
+spec:
+  staticConfigs:
+    - targets: ["status.tripranata.com"]
+  metricsPath: /metrics
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: vyos-smtp-relay
+spec:
+  staticConfigs:
+    - targets: ["172.16.16.11:8080"]
+  metricsPath: /metrics
+# ---
+# # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+# apiVersion: monitoring.coreos.com/v1alpha1
+# kind: ScrapeConfig
+# metadata:
+#   name: vyos-vnstat
+# spec:
+#   staticConfigs:
+#     - targets: ["vyos.monosense.io:8685"]
+#   metricsPath: /metrics
