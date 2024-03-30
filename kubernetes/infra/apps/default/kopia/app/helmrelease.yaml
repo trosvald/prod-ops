@@ -44,7 +44,7 @@ spec:
               - --address
               - 0.0.0.0:80
               - --override-hostname
-              - infra.tripranata.com
+              - infra.monosense.dev
               - --override-username
               - devin
               - --without-password
@@ -89,7 +89,7 @@ spec:
       main:
         className: internal
         hosts:
-          - host: &host "{{ .Release.Name }}.tripranata.com"
+          - host: &host "{{ .Release.Name }}.monosense.dev"
             paths:
               - path: /
                 service:

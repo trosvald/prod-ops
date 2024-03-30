@@ -127,7 +127,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: &host "{{ .Release.Name }}.tripranata.com"
+          - host: &host "{{ .Release.Name }}.monosense.dev"
             paths:
               - path: /
                 service:

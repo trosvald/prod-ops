@@ -98,7 +98,7 @@ spec:
         ingressClassName: internal
         pathType: Prefix
         hosts:
-          - &host prometheus.tripranata.com
+          - &host prometheus.monosense.dev
         tls:
           - hosts: [*host]
       prometheusSpec:
@@ -155,7 +155,7 @@ spec:
         enabled: true
         type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: thanos.tripranata.com
+          external-dns.alpha.kubernetes.io/hostname: thanos.monosense.dev
           io.cilium/lb-ipam-ips: 172.16.11.101
         externalTrafficPolicy: Cluster
       thanosServiceMonitor:

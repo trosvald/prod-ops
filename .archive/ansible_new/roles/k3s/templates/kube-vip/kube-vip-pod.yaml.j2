@@ -1,0 +1,62 @@
+#jinja2: lstrip_blocks: "True"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-vip
+  namespace: kube-system
+spec:
+  containers:
+    - name: kube-vip
+      image: ghcr.io/kube-vip/kube-vip:v0.6.4
+      imagePullPolicy: IfNotPresent
+      args:
+        - manager
+      env:
+        - name: address
+          value: "{{ kubevip_address }}"
+        - name: vip_arp
+          value: "false"
+        - name: vip_interface
+          value: "{{ kubevip_interface }}"
+        - name: port
+          value: "6443"
+        - name: vip_cidr
+          value: "32"
+        - name: cp_enable
+          value: "true"
+        - name: cp_namespace
+          value: "kube-system"
+        - name: vip_loglevel
+          value: "5"
+        - name: bgp_enable
+          value: "true"
+        - name: bgp_as
+          value: "{{ kubevip_asn }}"
+        {% if kubevip_source_ip is defined %}
+        - name: bgp_source_ip
+          value: "{{ kubevip_source_ip }}"
+        {% endif %}
+        - name: bgp_routerinterface
+          value: "{{ kubevip_interface }}"
+        - name: bgp_peeraddress
+          value: "{{ kubevip_peer_ip }}"
+        - name: bgp_peeras
+          value: "{{ kubevip_peer_asn }}"
+      securityContext:
+        capabilities:
+          add:
+            - NET_ADMIN
+            - NET_RAW
+      volumeMounts:
+        - mountPath: /etc/kubernetes/admin.conf
+          name: kubeconfig
+  hostAliases:
+    - hostnames:
+        - kubernetes
+      ip: 127.0.0.1
+  hostNetwork: true
+  volumes:
+    - hostPath:
+        path: /etc/rancher/k3s/k3s.yaml
+      name: kubeconfig

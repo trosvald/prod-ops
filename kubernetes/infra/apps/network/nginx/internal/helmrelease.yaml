@@ -28,7 +28,7 @@ spec:
       replicaCount: 1
       service:
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: internal.tripranata.com
+          external-dns.alpha.kubernetes.io/hostname: internal.monosense.dev
           io.cilium/lb-ipam-ips: 172.16.11.100
       ingressClassResource:
         name: internal
@@ -71,7 +71,7 @@ spec:
           namespaceSelector:
             any: true
       extraArgs:
-        default-ssl-certificate: network/tripranata-com-tls
+        default-ssl-certificate: network/monosense-dev-tls
       terminationGracePeriodSeconds: 120
       resources:
         requests:

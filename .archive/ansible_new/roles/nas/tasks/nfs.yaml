@@ -1,0 +1,31 @@
+---
+- name: nfs | install nfs packages
+  ansible.builtin.apt:
+    update_cache: yes # yamllint disable-line rule:truthy
+    pkg:
+      - nfs-common
+      - nfs-kernel-server
+    state: present
+
+- name: nfs | configure nfs exports
+  ansible.builtin.template:
+    src: exports.j2
+    dest: /etc/exports
+    mode: 0644
+  when:
+    - nfs_exports
+    - nfs_exports | length > 0
+
+- name: nfs | reload nfs exports
+  ansible.builtin.command:
+    cmd: "exportfs -ar"
+  when:
+    - nfs_exports
+    - nfs_exports | length > 0
+
+- name: nfs | restart nfs service
+  ansible.builtin.systemd:
+    name: nfs-kernel-server
+    daemon_reload: true
+    enabled: true
+    state: restarted

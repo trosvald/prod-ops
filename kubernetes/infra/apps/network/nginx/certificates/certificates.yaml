@@ -3,13 +3,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: tripranata-com
+  name: monosense-dev
 spec:
-  secretName: tripranata-com-tls
+  secretName: monosense-dev-tls
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: tripranata.com
+  commonName: monosense.dev
   dnsNames:
-    - tripranata.com
-    - "*.tripranata.com"
+    - monosense.dev
+    - "*.monosense.dev"

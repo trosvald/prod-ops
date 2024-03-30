@@ -1,0 +1,16 @@
+# {{ ansible_managed }}
+---
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    bond0:
+      addresses:
+        - {{ ansible_default_ipv4.address }}/24
+      routes:
+        - to: default
+          via: {{ ansible_default_ipv4.gateway }}
+      nameservers:
+        addresses:
+          - {{ ansible_default_ipv4.gateway }}
+        search: []

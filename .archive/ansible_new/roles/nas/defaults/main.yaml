@@ -1,0 +1,57 @@
+---
+zfs_sharing:
+  samba_enabled: false
+  timemachine_enabled: false
+  nfs_enabled: false
+
+# monitoring options not in mrlessmith.zfs role or more fine-tuned
+zfs_monitoring:
+  # enable email alerts
+  email_alerts: false
+  # enable smartd monitoring
+  smartd_alerts: false
+  # enable zfs-zed monitoring. needs email configured to work.
+  zed_alerts: false
+  # Use systemd timers instead of cron for scrubs
+  systemd_scrub_timer: false
+
+# systemd timer settings
+scrub_pools_timer:
+  # Run every month on the 1st and 15th at 1am
+  on_calendar: "*-*-1,15 01:00:00"
+  accuracy: 1h
+
+nfs_exports: []
+samba_global: []
+samba_shares: []
+samba_users: []
+
+apt_install_packages:
+  - acl
+  - dmraid
+  - git
+  - gnupg2
+  - ipmitool
+  - lm-sensors
+  - moreutils
+  - rclone
+  - tmux
+  - tree
+  - uidmap
+  - zsh
+
+apt_remove_packages:
+  - apparmor
+  - apport
+  - byobu
+  - friendly-recovery
+  - landscape-common
+  - lxd-agent-loader
+  - ntfs-3g
+  - plymouth
+  - plymouth-theme-ubuntu-text
+  - popularity-contest
+  - snapd
+  - sosreport
+  - ubuntu-advantage-tools
+  - ufw

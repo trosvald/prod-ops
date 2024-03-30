@@ -1,0 +1,23 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "packageRules": [
+      {
+        "description": ["Separate PRs for prod cluster"],
+        "matchFileNames": [
+          "**/kubernetes/prod/**",
+          "**/ansible/prod/**",
+          "**/terraform/prod/**"
+        ],
+        "additionalBranchPrefix": "prod-"
+      },
+      {
+        "description": ["Separate PRs for infra cluster"],
+        "matchFileNames": [
+          "**/kubernetes/infra/**",
+          "**/ansible/infra/**",
+          "**/terraform/infra/**"
+        ],
+        "additionalBranchPrefix": "infra-"
+      }
+    ]
+  }

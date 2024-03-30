@@ -33,12 +33,12 @@ spec:
               repository: quay.io/minio/minio
               tag: RELEASE.2024-03-15T01-07-19Z@sha256:ea2c70cda70860c7d10f04ce1df640d3abb995784cb7aeedef8d4baa53a5a113
             env:
-              MINIO_API_CORS_ALLOW_ORIGIN: https://minio.tripranata.com,https://s3.tripranata.com
-              MINIO_BROWSER_REDIRECT_URL: https://minio.tripranata.com
+              MINIO_API_CORS_ALLOW_ORIGIN: https://minio.monosense.dev,https://s3.monosense.dev
+              MINIO_BROWSER_REDIRECT_URL: https://minio.monosense.dev
               MINIO_PROMETHEUS_JOB_ID: minio
-              MINIO_PROMETHEUS_URL: https://prometheus.tripranata.com
+              MINIO_PROMETHEUS_URL: https://prometheus.monosense.dev
               MINIO_PROMETHEUS_AUTH_TYPE: public
-              MINIO_SERVER_URL: https://s3.tripranata.com
+              MINIO_SERVER_URL: https://s3.monosense.dev
               MINIO_UPDATE: "off"
             envFrom:
               - secretRef:
@@ -90,13 +90,13 @@ spec:
       app:
         className: internal
         hosts:
-          - host: &host "{{ .Release.Name }}.tripranata.com"
+          - host: &host "{{ .Release.Name }}.monosense.dev"
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-          - host: &s3Host s3.tripranata.com
+          - host: &s3Host s3.monosense.dev
             paths:
               - path: /
                 service:

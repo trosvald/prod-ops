@@ -1,0 +1,45 @@
+---
+- include: locale.yaml
+  tags:
+    - locale
+
+- include: packages.yaml
+  tags:
+    - packages
+
+- include: kernel.yaml
+  tags:
+    - kernel
+
+- include: network.yaml
+  tags:
+    - network
+
+- include: filesystem.yaml
+  tags:
+    - filesystem
+
+- include: disks.yaml
+  when: inventory_hostname not in groups['storage-nodes']
+  tags:
+    - disks
+
+- include: power.yaml
+  tags:
+    - power
+
+- include: grub.yaml
+  tags:
+    - grub
+
+- include: unattended-upgrades.yaml
+  tags:
+    - unattended-upgrades
+
+- include: group.yaml
+  tags:
+    - group
+
+- include: user.yaml
+  tags:
+    - user
