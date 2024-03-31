@@ -80,7 +80,7 @@ samba_shares: |-
 zfs_sharing:
   nfs_enabled: false
   samba_enabled: true
-  timemachine_enabled: true
+  timemachine_enabled: false
 
 zfs_monitoring:
   # enable email alerts
