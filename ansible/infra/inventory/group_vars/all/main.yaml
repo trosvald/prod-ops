@@ -1,16 +1,83 @@
 ---
+# Timezone for the servers
+timezone: "Asia/Jakarta"
+
+# Add cloudflare ntp server
+ntp_servers:
+  primary:
+    - "time.cloudflare.com"
+  fallback:
+    - "time.google.com"
+    - "ntp.bsn.go.id"
+
+# Additional ssh public keys to add to the nodes
+ssh_authorized_keys:
+  # Ubuntu WSL
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOnFkPxntTHJx6kRiYOLETdv5TM8dQAWzawW8/4cAvuG eko.pur25@gmail.com"
+  # Others
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICSdEHv/vDxZQiAnSIdj5SQBc5blJxPL9Joa/HizJiBF okd@monosense.io"
+
+# Package repo
+packages_repositories:
+  - ppa:fish-shell/release-3
+
+# Package Install
+packages_install:
+  - apt-transport-https
+  - ca-certificates
+  - containernetworking-plugins
+  - curl
+  - ffmpeg
+  - figlet
+  - fish
+  - fzf
+  - gettext
+  - git
+  - htop
+  - ifenslave
+  - iputils-ping
+  - net-tools
+  - lolcat
+  - mailutils
+  - msmtp
+  - msmtp-mta
+  - nano
+  - neofetch
+  - ntpdate
+  - podman
+  - psmisc
+  - rclone
+  - software-properties-common
+  - tmux
+  - tree
+  - uidmap
+  - unzip
+  - zfs-zed
+  - zfsutils-linux
+  - dmraid
+  - gdisk
+  - hdparm
+  - lvm2
+  - nfs-common
+  - nfs-kernel-server
+  - nvme-cli
+  - open-iscsi
+  - samba
+  - smartmontools
+  - socat
+
+# Package remove
+packages_remove:
+  - apparmor
+  - ufw
+  - unattended-upgrades
+
 # users & groups
 managed_groups:
   - name: home_users
     gid: 1042
 
 managed_users:
-  - name: monosense
-    password: "{{ monosense_passwd }}"
-    uid: 2000
-    shell: /bin/zsh
-    group: home_users
-    groups: sudo,adm
   - name: dian
     password: "{{ dian_passwd }}"
     uid: 2001

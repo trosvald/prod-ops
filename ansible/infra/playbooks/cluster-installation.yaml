@@ -17,7 +17,7 @@
 
     - name: Check if cluster can be upgraded
       when: k3s_installed.stat.exists
-      ansible.builtin.include_tasks: tasks/upgrade.yaml
+      ansible.builtin.include_tasks: tasks/k3s/k3s-upgrade.yaml
 
     - name: Ignore manifests templates and urls if the cluster is already installed
       when: k3s_installed.stat.exists
@@ -50,8 +50,23 @@
 
     - name: Cilium
       when: k3s_primary_control_node
-      ansible.builtin.include_tasks: tasks/cilium.yaml
+      ansible.builtin.include_tasks: tasks/k3s/k3s-cilium.yaml
 
     - name: Cruft
       when: k3s_primary_control_node
-      ansible.builtin.include_tasks: tasks/cruft.yaml
+      ansible.builtin.include_tasks: tasks/k3s/k3s-cruft.yaml
+
+    - name: Copy kubeconfig locally to KUBECONFIG directory
+      when: k3s_primary_control_node
+      ansible.builtin.fetch:
+        src: "/etc/rancher/k3s/k3s.yaml"
+        dest: "/home/monosense/devops/prod-ops/kubernetes/infra/kubeconfig"
+        flat: true
+
+    - name: Update kubeconfig address
+      delegate_to: localhost
+      become: false
+      ansible.builtin.replace:
+        path: "/home/monosense/devops/prod-ops/kubernetes/infra/kubeconfig"
+        regexp: "https://127.0.0.1:6443"
+        replace: "https://{{ k3s_registration_address }}:6443"

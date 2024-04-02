@@ -1,0 +1,203 @@
+---
+# users & groups
+managed_groups:
+  - name: home_users
+    gid: 1042
+
+managed_users:
+  - name: monosense
+    password: "{{ monosense_passwd }}"
+    uid: 2000
+    shell: /usr/bin/fish
+    group: home_users
+    groups: sudo,adm
+  - name: dian
+    password: "{{ dian_passwd }}"
+    uid: 2001
+    group: home_users
+  - name: ezzel
+    password: "{{ ezzel_passwd }}"
+    uid: 2002
+    group: home_users
+  - name: ezky
+    password: "{{ ezky_passwd }}"
+    uid: 2003
+    group: home_users
+
+# email settings
+smtp_account_name: monosense
+smtp_address: smtp-relay.monosense.io
+smtp_port: 25
+
+# smart settings
+smartd_config: |-
+  # hdd
+  DEFAULT -a -o on -S on -d removable -n never -s (L/../(08|23)/./04|S/../(05|12|19|26)/./03) -W 5,41,45 -m root
+  /dev/disk/by-id/scsi-SATA_TOSHIBA_HDWQ140_89BTK1E5FAYG
+  /dev/disk/by-id/scsi-SATA_TOSHIBA_HDWQ140_89BEK1W3FAYG
+  /dev/disk/by-id/scsi-SATA_TOSHIBA_HDWQ140_89BTK1E6FAYG
+  /dev/disk/by-id/scsi-SATA_ST4000NM0053_Z1Z4KN62
+  # ssd
+  DEFAULT -a -o on -S on -d removable -n never -s (L/../(10|25)/./04|S/../(05|12|19|26)/./03) -W 10,59,65 -m root
+  /dev/disk/by-id/scsi-SATA_SDLF1DAM800G-1HH_A0462775
+  /dev/disk/by-id/scsi-SATA_SDLF1DAM800G-1HH_A0462858
+  /dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC602408EM800NGN
+  /dev/disk/by-id/scsi-SATA_SDLF1DAM800G-1HH_A04140B6
+  /dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC60430ASC800NGN
+  /dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC602501S8800NGN
+  /dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC604306DT800NGN
+  /dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC602501GV800NGN
+
+# samba settings
+samba_users:
+  - name: monosense
+    password: "{{ monosense_passwd }}"
+  - name: dian
+    password: "{{ dian_passwd }}"
+  - name: ezzel
+    password: "{{ ezzel_passwd }}"
+  - name: ezky
+    password: "{{ ezky_passwd }}"
+
+samba_shares: |-
+  [data]
+    comment = Data
+    path = /hdd/data
+    public = no
+    read only = no
+    valid users= @home_users
+    force group = home_users
+
+  [media]
+    comment = Media
+    path = /hdd/media
+    public = no
+    read only = no
+    valid users= monosense
+    force group = home_users
+
+# -- my role -- #
+zfs_sharing:
+  nfs_enabled: false
+  samba_enabled: true
+  timemachine_enabled: false
+
+zfs_monitoring:
+  # enable email alerts
+  email_alerts: true
+  # enable smartd monitoring
+  smartd_alerts: true
+  # enable zfs-zed monitoring. needs email configured to work.
+  zed_alerts: true
+  # Use systemd timers instead of cron for scrubs
+  systemd_scrub_timer: true
+
+# -- below this line is from mrlessmith.zfs role -- #
+zfs_install_update: false
+zfs_manage_filesystem_permissions: true
+zfs_enable_auto_snapshots: false
+zfs_enable_performance_tuning: true
+zfs_create_pools: true
+zfs_create_filesystems: true
+
+zfs_pools:
+  - name: hdd
+    action: create
+    atime: on # yamllint disable-line rule:truthy
+    compression: lz4
+    devices:
+      - "/dev/disk/by-id/scsi-SATA_TOSHIBA_HDWQ140_89BTK1E5FAYG"
+      - "/dev/disk/by-id/scsi-SATA_TOSHIBA_HDWQ140_89BEK1W3FAYG"
+      - "/dev/disk/by-id/scsi-SATA_TOSHIBA_HDWQ140_89BTK1E6FAYG"
+      - "/dev/disk/by-id/scsi-SATA_ST4000NM0053_Z1Z4KN62"
+    type: raidz1
+    state: present
+  - name: ssd
+    action: create
+    atime: on # yamllint disable-line rule:truthy
+    compression: lz4
+    devices:
+      - "/dev/disk/by-id/scsi-SATA_SDLF1DAM800G-1HH_A0462775"
+      - "/dev/disk/by-id/scsi-SATA_SDLF1DAM800G-1HH_A0462858"
+      - "/dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC602408EM800NGN"
+      - "/dev/disk/by-id/scsi-SATA_SDLF1DAM800G-1HH_A04140B6"
+      - "/dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC60430ASC800NGN"
+      - "/dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC602501S8800NGN"
+      - "/dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC604306DT800NGN"
+      - "/dev/disk/by-id/scsi-SATA_INTEL_SSDSC2BX80_BTHC602501GV800NGN"
+    type: raidz1
+    state: present
+
+zfs_filesystems:
+  - name: data
+    pool: hdd
+    state: present
+    owner: root
+    group: home_users
+    mode: 775
+    mountpoint: /hdd/data
+
+  - name: k8s
+    pool: ssd
+    state: present
+    owner: root
+    group: root
+    mode: 755
+    mountpoint: /ssd/k8s
+  - name: k8s/minio
+    pool: ssd
+    state: present
+    owner: 1000
+    group: 1000
+    mode: 755
+    mountpoint: /ssd/k8s/minio
+
+  - name: media
+    pool: hdd
+    state: present
+    owner: root
+    group: home_users
+    mode: 775
+    mountpoint: /hdd/media
+  - name: media/audiobooks
+    pool: hdd
+    state: present
+    owner: root
+    group: home_users
+    mode: 775
+    mountpoint: /hdd/media/audiobooks
+  - name: media/downloads
+    pool: hdd
+    state: present
+    owner: root
+    group: home_users
+    mode: 775
+    mountpoint: /hdd/media/downloads
+  - name: media/music
+    pool: hdd
+    state: present
+    owner: root
+    group: home_users
+    mode: 775
+    mountpoint: /hdd/media/music
+  - name: media/photos
+    pool: hdd
+    state: present
+    owner: root
+    group: home_users
+    mode: 775
+    mountpoint: /hdd/media/photos
+  - name: media/movies
+    pool: hdd
+    state: present
+    owner: root
+    group: home_users
+    mode: 775
+    mountpoint: /hdd/media/movies
+  - name: media/tvshows
+    pool: hdd
+    state: present
+    owner: root
+    group: home_users
+    mode: 775
+    mountpoint: /hdd/media/tvshows

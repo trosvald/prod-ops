@@ -27,6 +27,25 @@ tasks:
     generates:
       - "{{.ROOT_DIR}}/.venv/pyvenv.cfg"
 
+  prepare:
+    desc: Run an Ansible playbook for OS preparation
+    summary: |
+      Args:
+        cluster: Cluster to rum command against (required)
+        playbook: Playbook to run (required)
+    prompt: Run Ansible playbook '{{.playbook}}' againts the '{{.cluster}} cluster ... continue?'
+    deps: ["venv"]
+    cmd: |
+      .venv/bin/ansible-playbook -vvv \
+        --inventory {{.ANSIBLE_DIR}}/{{.cluster}}/inventory/hosts.yaml \
+        {{.ANSIBLE_DIR}}/{{.cluster}}/playbooks/{{.playbook}}.yaml {{.CLI_ARGS}}
+    requires:
+      vars: ["cluster", "playbook"]
+    preconditions:
+      - test -d {{.ROOT_DIR}}/.venv
+      - test -f {{.ANSIBLE_DIR}}/{{.cluster}}/inventory/hosts.yaml
+      - test -f {{.ANSIBLE_DIR}}/{{.cluster}}/playbooks/{{.playbook}}.yaml
+
   run:
     desc: Run an Ansible playbook for configuring a cluster
     summary: |
