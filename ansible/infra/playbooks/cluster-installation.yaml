@@ -17,7 +17,7 @@
 
     - name: Check if cluster can be upgraded
       when: k3s_installed.stat.exists
-      ansible.builtin.include_tasks: tasks/k3s/k3s-upgrade.yaml
+      ansible.builtin.include_tasks: tasks/upgrade.yaml
 
     - name: Ignore manifests templates and urls if the cluster is already installed
       when: k3s_installed.stat.exists
@@ -50,11 +50,11 @@
 
     - name: Cilium
       when: k3s_primary_control_node
-      ansible.builtin.include_tasks: tasks/k3s/k3s-cilium.yaml
+      ansible.builtin.include_tasks: tasks/cilium.yaml
 
     - name: Cruft
       when: k3s_primary_control_node
-      ansible.builtin.include_tasks: tasks/k3s/k3s-cruft.yaml
+      ansible.builtin.include_tasks: tasks/cruft.yaml
 
     - name: Copy kubeconfig locally to KUBECONFIG directory
       when: k3s_primary_control_node
