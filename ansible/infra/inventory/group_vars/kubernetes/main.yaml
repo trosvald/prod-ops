@@ -1,4 +1,5 @@
 ---
+# K3S Config
 k3s_become: true
 k3s_etcd_datastore: true
 k3s_install_hard_links: true

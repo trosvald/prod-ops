@@ -91,9 +91,9 @@ spec:
     persistence:
       config:
         existingClaim: filebrowser
-      eros:
+      hdd:
         type: hostPath
-        hostPath: /hdd
+        hostPath: /slow/data
         hostPathType: Directory
         globalMounts:
           - path: /hdd

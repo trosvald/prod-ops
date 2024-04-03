@@ -107,7 +107,7 @@ spec:
     persistence:
       config:
         type: hostPath
-        hostPath: /ssd/Minio
+        hostPath: fast/k8s/minio
         hostPathType: Directory
         globalMounts:
           - path: /data
