@@ -68,7 +68,41 @@ tasks:
       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/apps/{{.path}}/ks.yaml
 
   reconcile:
+    summary: |
+      Args:
+        cluster: Cluster to run command against (required)
+    prompt: Flux reconcile '{{.cluster}}' cluster ... continue?
     desc: Force update Flux to pull in changes from your Git repository
+    requires:
+      vars: ["cluster"]
     cmds:
-      - flux reconcile -n flux-system source git prod-ops
-      - flux reconcile -n flux-system kustomization cluster
+      - flux --context {{.cluster}} reconcile -n flux-system source git prod-ops
+      - flux --context {{.cluster}} reconcile -n flux-system kustomization cluster
+
+  hr-sync:
+    summary: |
+      Args:
+        cluster: Cluster to run command against (required)
+    prompt: Sync all flux helmrelease '{{.cluster}}' cluster ... continue?
+    desc: Sync all Flux HelmReleases
+    requires:
+      vars: ["cluster"]
+    cmds:
+      - |
+        kubectl --context {{.cluster}} get helmreleases --all-namespaces --no-headers | awk '{print $1, $2}' \
+          | xargs -P 4 -L 1 bash -c \
+            'kubectl --context {{.cluster}} -n $0 annotate helmrelease/$1 reconcile.fluxcd.io/requestedAt="$(date +%s)" --overwrite'
+
+  ks-sync:
+    summary: |
+      Args:
+        cluster: Cluster to run command against (required)
+    prompt: Sync all flux Kustomization '{{.cluster}}' cluster ... continue?
+    desc: Sync all Flux Kustomization
+    requires:
+      vars: ["cluster"]
+    cmds:
+      - |
+        kubectl --context {{.cluster}} get kustomization --all-namespaces --no-headers | awk '{print $1, $2}' \
+          | xargs -P 4 -L 1 bash -c \
+            'kubectl --context {{.cluster}} -n $0 annotate kustomization/$1 reconcile.fluxcd.io/requestedAt="$(date +%s)" --field-manager=flux-client-side-apply --overwrite'
