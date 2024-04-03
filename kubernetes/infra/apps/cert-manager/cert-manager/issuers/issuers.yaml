@@ -14,7 +14,7 @@ spec:
       - dns01:
           cloudflare:
             email: eko.pur25@gmail.com
-            apiKeySecretRef:
+            apiTokenSecretRef:
               name: cloudflare-secret
               key: cloudflare_api_token
         selector:
@@ -36,7 +36,7 @@ spec:
       - dns01:
           cloudflare:
             email: eko.pur25@gmail.com
-            apiKeySecretRef:
+            apiTokenSecretRef:
               name: cloudflare-secret
               key: cloudflare_api_token
         selector:
