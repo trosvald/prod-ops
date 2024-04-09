@@ -15,7 +15,7 @@
             "console=ttyS0",
             "printk.devkmsg=on",
             "talos.platform=metal",
-            "talos.config=http://192.168.254.12/assets/controller.yaml"
+            "talos.config=http://172.16.16.4/assets/controller.yaml"
         ]
     }
 }
