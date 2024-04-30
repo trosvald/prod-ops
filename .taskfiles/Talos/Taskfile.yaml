@@ -11,7 +11,7 @@ vars:
   VYOS_MATCHBOX_ASSETS_DIR: "{{.VYOS_MATCHBOX_DIR}}/assets"
   VYOS_MATCHBOX_ADDR: matchbox.monosense.dev
   # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-  TALOS_VERSION: v1.6.7
+  TALOS_VERSION: v1.7.0
   TALOS_SCHEMATIC_ID: 373392515ac3890a73d3b1f6cf23d4b96e20aef2dd5b42cb00bd73de1b0e07ff
   # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
   KUBERNETES_VERSION: v1.30.0
